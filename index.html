@@ -21,12 +21,23 @@
       <header class="site-header">
         <img src="img/loreal-logo.png" alt="L'Oréal Logo" class="logo" />
         <h1 class="site-title">Smart Routine &amp; Product Advisor</h1>
+        <!-- LevelUp: switch between left-to-right and right-to-left layouts -->
+        <button id="dirToggle" class="dir-toggle" type="button">
+          Switch to RTL (عربى)
+        </button>
       </header>
 
       <!-- Category Filter -->
       <div class="search-section">
+        <!-- LevelUp: search products by name or keyword -->
+        <input
+          id="productSearch"
+          type="search"
+          placeholder="Search products by name or keyword…"
+          aria-label="Search products"
+        />
         <select id="categoryFilter">
-          <option value="" disabled selected>Choose a Category</option>
+          <option value="" selected>All Categories</option>
           <option value="cleanser">Cleansers</option>
           <option value="moisturizer">Moisturizers & Treatments</option>
           <option value="haircare">Haircare</option>
@@ -44,7 +55,12 @@
 
       <!-- Selected Products -->
       <div class="selected-products">
-        <h2>Selected Products</h2>
+        <div class="selected-header">
+          <h2>Selected Products</h2>
+          <button id="clearSelections" class="clear-btn" type="button">
+            <i class="fa-solid fa-trash"></i> Clear All
+          </button>
+        </div>
         <div id="selectedProductsList"></div>
         <button id="generateRoutine" class="generate-btn">
           <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Routine
@@ -75,7 +91,7 @@
 
       <!------- Footer Links ------->
       <footer class="site-footer">
-        <p>&copy; 2025 L'Oréal. All rights reserved.</p>
+        <p>&copy; 2026 L'Oréal. All rights reserved.</p>
         <nav>
           <!-- These URLs are placeholders -->
           <a href="#">Privacy Policy</a>
