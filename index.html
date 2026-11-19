@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +12,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
+    <link rel="icon" href="img/loreal-logo.png" />
     <link rel="stylesheet" href="style.css" />
   </head>
 
@@ -19,26 +20,29 @@
     <div class="page-wrapper">
       <!------- Header / Branding ------->
       <header class="site-header">
+        <!-- LevelUp: RTL language support. Changing this sets dir="rtl" on the page -->
+        <div class="lang-bar">
+          <label for="languageSelect"><i class="fa-solid fa-language" aria-hidden="true"></i> Language</label>
+          <select id="languageSelect">
+            <option value="en" data-dir="ltr">English</option>
+            <option value="fr" data-dir="ltr">Français</option>
+            <option value="ar" data-dir="rtl">العربية (RTL)</option>
+            <option value="he" data-dir="rtl">עברית (RTL)</option>
+          </select>
+        </div>
         <img src="img/loreal-logo.png" alt="L'Oréal Logo" class="logo" />
         <h1 class="site-title">Smart Routine &amp; Product Advisor</h1>
-        <!-- LevelUp: switch between left-to-right and right-to-left layouts -->
-        <button id="dirToggle" class="dir-toggle" type="button">
-          Switch to RTL (عربى)
-        </button>
+        <p class="site-tagline">Pick your products. Get a routine made for you.</p>
       </header>
 
-      <!-- Category Filter -->
+      <!-- Category Filter + Product Search (LevelUp) -->
       <div class="search-section">
-        <!-- LevelUp: search products by name or keyword -->
-        <input
-          id="productSearch"
-          type="search"
-          placeholder="Search products by name or keyword…"
-          aria-label="Search products"
-        />
+        <label for="categoryFilter" class="visually-hidden">Category</label>
         <select id="categoryFilter">
-          <option value="" selected>All Categories</option>
+          <option value="" disabled selected>Choose a Category</option>
+          <option value="all">All Products</option>
           <option value="cleanser">Cleansers</option>
+          <option value="skincare">Skincare</option>
           <option value="moisturizer">Moisturizers & Treatments</option>
           <option value="haircare">Haircare</option>
           <option value="makeup">Makeup</option>
@@ -48,21 +52,40 @@
           <option value="suncare">Suncare</option>
           <option value="fragrance">Fragrance</option>
         </select>
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <label for="productSearch" class="visually-hidden">Search products</label>
+          <input
+            id="productSearch"
+            type="search"
+            placeholder="Search by name, brand, or keyword…"
+            autocomplete="off"
+          />
+        </div>
       </div>
 
       <!-- Products Grid -->
-      <div id="productsContainer" class="products-grid"></div>
+      <p class="grid-hint">Tap a product to add it to your routine. Tap <i class="fa-solid fa-circle-info" aria-hidden="true"></i> to read about it.</p>
+      <div id="productsContainer" class="products-grid" aria-live="polite"></div>
 
       <!-- Selected Products -->
       <div class="selected-products">
         <div class="selected-header">
-          <h2>Selected Products</h2>
-          <button id="clearSelections" class="clear-btn" type="button">
-            <i class="fa-solid fa-trash"></i> Clear All
+          <h2>Selected Products <span id="selectedCount" class="count-badge">0</span></h2>
+          <button id="clearAll" class="clear-btn" type="button">
+            <i class="fa-solid fa-trash-can" aria-hidden="true"></i> Clear all
           </button>
         </div>
         <div id="selectedProductsList"></div>
-        <button id="generateRoutine" class="generate-btn">
+
+        <!-- LevelUp: web search toggle (needs the web-search Worker, see README) -->
+        <label class="web-toggle">
+          <input type="checkbox" id="webSearchToggle" />
+          Use live web search for current info &amp; links
+        </label>
+
+        <button id="generateRoutine" class="generate-btn" type="button">
           <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Routine
         </button>
       </div>
@@ -70,7 +93,14 @@
       <!------- Chat Area ------->
       <section class="chatbox">
         <h2>Let's Build Your Routine</h2>
-        <div id="chatWindow" class="chat-window"></div>
+        <div
+          id="chatWindow"
+          class="chat-window"
+          role="log"
+          aria-live="polite"
+          aria-label="Conversation"
+          tabindex="0"
+        ></div>
 
         <form id="chatForm" class="chat-form">
           <label for="userInput" class="visually-hidden">Message</label>
@@ -80,6 +110,7 @@
             type="text"
             placeholder="Ask me about products or routines…"
             autocomplete="off"
+            maxlength="500"
             required
           />
           <button type="submit" id="sendBtn">
